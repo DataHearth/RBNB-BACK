@@ -10,7 +10,3 @@ app.listen(port, () => {
   logger.info(`Server listening on port ${port}`);
 });
 app.use(cors());
-
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});

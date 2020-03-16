@@ -27,7 +27,8 @@
       "require-await": "error",
       "semi": "error",
       "quotes": [2, "single"],
-      "import/extensions": "off"
+      "import/extensions": "off",
+      "object-curly-spacing": "off"
     },
     "settings": {
       "import/resolver": {
