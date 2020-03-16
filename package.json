@@ -8,7 +8,10 @@
     "test": "jest",
     "build": "tsc",
     "start": "cross-env NODE_ENV=development && npm run build && node dist/app.js",
-    "dev": "cross-env NODE_ENV=development && npm run build && node dist/app.js"
+    "dev": "cross-env NODE_ENV=development && npm run build && node dist/app.js",
+    "prerelease": "npm run eslint",
+    "release": "standard-version --header \"# Changelog\n\nAll notable changes to this project will be documented in this file.\"",
+    "postrelease": "git push --follow-tags origin master"
   },
   "repository": {
     "type": "git",
@@ -33,6 +36,7 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
+    "standard-version": "^7.1.0",
     "typescript": "^3.8.3"
   }
 }
