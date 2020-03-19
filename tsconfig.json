@@ -3,8 +3,7 @@
     "target": "ESNext",
     "module": "commonjs",
     "outDir": "dist",
-    "sourceMap": true,
-    "resolveJsonModule": true
+    "sourceMap": true
   },
   "include": [
     "**/*.ts"

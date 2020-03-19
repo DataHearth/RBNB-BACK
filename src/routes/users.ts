@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import admin from '../lib/firebase';
 import logger from '../lib/logger';
+import usersModel from '../models/users';
 
 const firestore = admin.firestore();
 
@@ -16,7 +17,7 @@ router.get('/users', async (req, res) => {
     }
 
     logger.info('retrieved all users');
-    let formattedUsers: Array<object>;
+    const formattedUsers = [];
 
     users.forEach((document) => {
       formattedUsers.push({
@@ -50,8 +51,14 @@ router.get('/users/:id', async (req, res) => {
 });
 
 router.post('/users/:id', async (req, res) => {
+  const validatedUser = usersModel.validate(req.body.data);
+  if (validatedUser.error) {
+    res.status(400).end();
+    return;
+  }
+
   try {
-    await firestore.collection('users').doc(req.params.id).update(req.body.data);
+    await firestore.collection('users').doc(req.params.id).update(validatedUser.value);
 
     res.status(201).end();
   } catch (error) {
@@ -61,13 +68,19 @@ router.post('/users/:id', async (req, res) => {
 });
 
 router.put('/users', async (req, res) => {
+  const validatedUser = usersModel.validate(req.body.data);
+  if (validatedUser.error) {
+    res.status(400).end();
+    return;
+  }
+
   try {
-    const user = await firestore.collection('users').add(req.body.data);
-    logger.info(`User added with id ${user.id}`, {data: req.body.data});
+    const user = await firestore.collection('users').add(validatedUser.value);
+    logger.info(`User added with id ${user.id}`, {data: validatedUser.value});
 
     res.json({
       id: user.id,
-      ...req.body.data,
+      ...validatedUser.value,
     });
   } catch (error) {
     logger.error(error);
