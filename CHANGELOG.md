@@ -1,6 +1,8 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.0](https://github.com/DataHearth/RBNB-BACK/compare/v0.0.3...v1.0.0) (2020-03-19)
+
 ### [0.0.3](https://github.com/DataHearth/RBNB-BACK/compare/v0.0.2...v0.0.3) (2020-03-19)
 
 
