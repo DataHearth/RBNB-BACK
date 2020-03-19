@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as cors from 'cors';
+import * as bodyParser from 'body-parser';
 import logger from './src/lib/logger';
 import locationsRoutes from './src/routes/locations';
 import usersRoutes from './src/routes/users';
@@ -13,6 +14,7 @@ app.listen(port, () => {
   logger.info(`Server listening on port ${port}`);
 });
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.send('Hello, world!'));
 
