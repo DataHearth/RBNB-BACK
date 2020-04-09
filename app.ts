@@ -5,6 +5,7 @@ import logger from './src/lib/logger';
 import locationsRoutes from './src/routes/locations';
 import usersRoutes from './src/routes/users';
 import servicesRoutes from './src/routes/services';
+import authenticate from './src/lib/authenticate';
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.listen(port, () => {
 });
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(authenticate);
 
 app.get('/', (req, res) => res.send('Hello, world!'));
 
