@@ -51,7 +51,7 @@ router.get('/dwellings/:id', async (req, res) => {
 });
 
 router.post('/dwellings/:id', async (req, res) => {
-  const validatedDwelling = dwellingsDwelling.validate(req.body.data);
+  const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/dwellings/:id', async (req, res) => {
 });
 
 router.put('/dwellings', async (req, res) => {
-  const validatedDwelling = dwellingsDwelling.validate(req.body.data);
+  const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
     res.status(400).end();
     return;

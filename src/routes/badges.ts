@@ -51,7 +51,7 @@ router.get('/badges/:id', async (req, res) => {
 });
 
 router.post('/badges/:id', async (req, res) => {
-  const validatedBadge = badgesModel.validate(req.body.data);
+  const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/badges/:id', async (req, res) => {
 });
 
 router.put('/badges', async (req, res) => {
-  const validatedBadge = badgesModel.validate(req.body.data);
+  const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
     return;

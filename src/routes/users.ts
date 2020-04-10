@@ -51,7 +51,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 router.post('/users/:id', async (req, res) => {
-  const validatedUser = usersModel.validate(req.body.data);
+  const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/users/:id', async (req, res) => {
 });
 
 router.put('/users', async (req, res) => {
-  const validatedUser = usersModel.validate(req.body.data);
+  const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
     return;

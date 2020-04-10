@@ -51,7 +51,7 @@ router.get('/services/:id', async (req, res) => {
 });
 
 router.post('/services/:id', async (req, res) => {
-  const validatedService = servicesModel.validate(req.body.data);
+  const validatedService = servicesModel.validate(req.body);
   if (validatedService.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/services/:id', async (req, res) => {
 });
 
 router.put('/services', async (req, res) => {
-  const validatedService = servicesModel.validate(req.body.data);
+  const validatedService = servicesModel.validate(req.body);
   if (validatedService.error) {
     res.status(400).end();
     return;

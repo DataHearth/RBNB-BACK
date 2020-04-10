@@ -51,7 +51,7 @@ router.get('/reviews/:id', async (req, res) => {
 });
 
 router.post('/reviews/:id', async (req, res) => {
-  const validatedReview = reviewsModel.validate(req.body.data);
+  const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/reviews/:id', async (req, res) => {
 });
 
 router.put('/reviews', async (req, res) => {
-  const validatedReview = reviewsModel.validate(req.body.data);
+  const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     res.status(400).end();
     return;

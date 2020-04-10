@@ -51,7 +51,7 @@ router.get('/locations/:id', async (req, res) => {
 });
 
 router.post('/locations/:id', async (req, res) => {
-  const validatedLocation = locationsModel.validate(req.body.data);
+  const validatedLocation = locationsModel.validate(req.body);
   if (validatedLocation.error) {
     res.status(400).end();
     return;
@@ -68,7 +68,7 @@ router.post('/locations/:id', async (req, res) => {
 });
 
 router.put('/locations', async (req, res) => {
-  const validatedLocation = locationsModel.validate(req.body.data);
+  const validatedLocation = locationsModel.validate(req.body);
   if (validatedLocation.error) {
     res.status(400).end();
     return;
