@@ -1,4 +1,5 @@
 import {Router} from 'express';
+import * as firebase from 'firebase-admin';
 import admin from '../lib/firebase';
 import logger from '../lib/logger';
 import locationsModel from '../models/locations';
@@ -51,7 +52,10 @@ router.get('/locations/:id', async (req, res) => {
 });
 
 router.post('/locations/:id', async (req, res) => {
-  const validatedLocation = locationsModel.validate(req.body);
+  const {city, longitude, latitude} = req.body;
+  const geopoints = new firebase.firestore.GeoPoint(latitude, longitude);
+
+  const validatedLocation = locationsModel.validate({city, coordinates: geopoints});
   if (validatedLocation.error) {
     res.status(400).end();
     return;
@@ -68,7 +72,10 @@ router.post('/locations/:id', async (req, res) => {
 });
 
 router.put('/locations', async (req, res) => {
-  const validatedLocation = locationsModel.validate(req.body);
+  const {city, longitude, latitude} = req.body;
+  const geopoints = new firebase.firestore.GeoPoint(latitude, longitude);
+
+  const validatedLocation = locationsModel.validate({city, coordinates: geopoints});
   if (validatedLocation.error) {
     res.status(400).end();
     return;
