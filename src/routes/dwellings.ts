@@ -17,16 +17,16 @@ router.get('/dwellings', async (req, res) => {
     }
 
     logger.info('retrieved all dwellings');
-    const formatteddwellings = [];
+    const formattedDwellings = [];
 
     dwellings.forEach((document) => {
-      formatteddwellings.push({
+      formattedDwellings.push({
         id: document.id,
         ...document.data(),
       });
     });
 
-    res.json(formatteddwellings);
+    res.json(formattedDwellings);
   } catch (error) {
     logger.error(error);
     res.status(500).end();
