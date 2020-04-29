@@ -5,6 +5,9 @@ import logger from './src/lib/logger';
 import locationsRoutes from './src/routes/locations';
 import usersRoutes from './src/routes/users';
 import servicesRoutes from './src/routes/services';
+import reviewsRoutes from './src/routes/reviews';
+import dwellingsRoutes from './src/routes/dwellings';
+import badgesRoutes from './src/routes/badges';
 
 const app = express();
 
@@ -16,8 +19,9 @@ app.listen(port, () => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => res.send('Hello, world!'));
-
 app.use('/', locationsRoutes);
 app.use('/', usersRoutes);
 app.use('/', servicesRoutes);
+app.use('/', reviewsRoutes);
+app.use('/', dwellingsRoutes);
+app.use('/', badgesRoutes);
