@@ -8,6 +8,7 @@ import servicesRoutes from './src/routes/services';
 import reviewsRoutes from './src/routes/reviews';
 import dwellingsRoutes from './src/routes/dwellings';
 import badgesRoutes from './src/routes/badges';
+import fileHandling from './src/lib/file';
 
 const app = express();
 
@@ -25,3 +26,4 @@ app.use('/', servicesRoutes);
 app.use('/', reviewsRoutes);
 app.use('/', dwellingsRoutes);
 app.use('/', badgesRoutes);
+app.use('/file', fileHandling);
