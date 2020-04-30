@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import {Request} from 'express';
+import {Request, Response} from 'express';
 import * as Busboy from 'busboy';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -43,7 +43,7 @@ async function uploadFile(metadata: Metadata) {
   }
 }
 
-export default function parseBody(req: Request) {
+export default function parseBody(req: Request, res: Response) {
   const uploadMetadata: Array<Metadata> = [];
   const urls: Array<string> = [];
 
@@ -58,13 +58,15 @@ export default function parseBody(req: Request) {
     });
   });
 
-  busboy.on('finish', () => {
-    uploadMetadata.forEach(async (metadata) => {
-      urls.push(await uploadFile(metadata));
-    });
+  busboy.on('finish', async () => {
+    for (let index = 0; index < uploadMetadata.length; index += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const url = await uploadFile(uploadMetadata[index]);
+      urls.push(url);
+    }
+
+    res.json(urls.length > 1 ? urls : urls[0]);
   });
 
   req.pipe(busboy);
-
-  return urls;
 }
