@@ -26,4 +26,4 @@ app.use('/', servicesRoutes);
 app.use('/', reviewsRoutes);
 app.use('/', dwellingsRoutes);
 app.use('/', badgesRoutes);
-app.use('/file', fileHandling);
+app.use('/upload', fileHandling);
