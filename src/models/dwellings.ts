@@ -3,8 +3,8 @@ import * as joi from '@hapi/joi';
 export default joi.object().keys({
   badges: joi.array().items(joi.string()).required(),
   description: joi.string().required(),
-  location: joi.string().required(),
-  pictures: joi.array().items(joi.string()),
+  location: joi.string().required(), // ? Probably could move the collection in an object here
+  pictures: joi.array().items(joi.string().uri()),
   technicalSheet: joi.object().keys({
     price: joi.number().required(),
     rentalType: joi.string(), // ! Set valid data
