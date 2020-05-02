@@ -9,9 +9,8 @@ import servicesRoutes from './src/routes/services';
 import reviewsRoutes from './src/routes/reviews';
 import dwellingsRoutes from './src/routes/dwellings';
 import badgesRoutes from './src/routes/badges';
-import fileHandling from './src/lib/file';
 
-const upload = multer({dest: 'temp'});
+const upload = multer();
 const app = express();
 
 const port = process.env.PORT || 8080;
@@ -29,6 +28,6 @@ app.use(cors());
 app.use('/locations', upload.none(), locationsRoutes);
 app.use('/reviews', upload.none(), reviewsRoutes);
 app.use('/services', upload.none(), servicesRoutes);
-app.use('/users', upload.single('picture'), fileHandling, usersRoutes);
-app.use('/badges', upload.single('picture'), fileHandling, badgesRoutes);
-app.use('/dwellings', upload.array('pictures', 3), fileHandling, dwellingsRoutes);
+app.use('/users', usersRoutes);
+app.use('/badges', badgesRoutes);
+app.use('/dwellings', dwellingsRoutes);

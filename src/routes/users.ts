@@ -1,13 +1,17 @@
 import {Router} from 'express';
+import * as multer from 'multer';
 import admin from '../lib/firebase';
 import logger from '../lib/logger';
 import usersModel from '../models/users';
+import fileHandling from '../lib/file';
+
+const upload = multer({dest: 'temp'});
 
 const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', upload.none(), async (req, res) => {
   try {
     const users = await firestore.collection('users').get();
     if (users.empty) {
@@ -33,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', upload.none(), async (req, res) => {
   try {
     const user = await firestore.collection('users').doc(req.params.id).get();
     if (!user.exists) {
@@ -50,7 +54,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
@@ -67,7 +71,7 @@ router.post('/:id', async (req, res) => {
   }
 });
 
-router.put('/', async (req, res) => {
+router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
@@ -88,7 +92,7 @@ router.put('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', upload.none(), async (req, res) => {
   try {
     await firestore.collection('users').doc(req.params.id).delete();
     logger.info(`User ${req.params.id} deleted`);

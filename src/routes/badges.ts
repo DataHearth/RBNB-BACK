@@ -1,13 +1,17 @@
 import {Router} from 'express';
+import * as multer from 'multer';
 import admin from '../lib/firebase';
 import logger from '../lib/logger';
 import badgesModel from '../models/badges';
+import fileHandling from '../lib/file';
+
+const upload = multer({dest: 'temp'});
 
 const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', upload.none(), async (req, res) => {
   try {
     const badges = await firestore.collection('badges').get();
     if (badges.empty) {
@@ -33,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', upload.none(), async (req, res) => {
   try {
     const badge = await firestore.collection('badges').doc(req.params.id).get();
     if (!badge.exists) {
@@ -50,7 +54,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
@@ -67,7 +71,7 @@ router.post('/:id', async (req, res) => {
   }
 });
 
-router.put('/', async (req, res) => {
+router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
@@ -88,7 +92,7 @@ router.put('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', upload.none(), async (req, res) => {
   try {
     await firestore.collection('badges').doc(req.params.id).delete();
     logger.info(`Badge ${req.params.id} deleted`);
