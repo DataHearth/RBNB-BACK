@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/badges', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const badges = await firestore.collection('badges').get();
     if (badges.empty) {
@@ -33,7 +33,7 @@ router.get('/badges', async (req, res) => {
   }
 });
 
-router.get('/badges/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const badge = await firestore.collection('badges').doc(req.params.id).get();
     if (!badge.exists) {
@@ -50,7 +50,7 @@ router.get('/badges/:id', async (req, res) => {
   }
 });
 
-router.post('/badges/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
@@ -67,7 +67,7 @@ router.post('/badges/:id', async (req, res) => {
   }
 });
 
-router.put('/badges', async (req, res) => {
+router.put('/', async (req, res) => {
   const validatedBadge = badgesModel.validate(req.body);
   if (validatedBadge.error) {
     res.status(400).end();
@@ -88,7 +88,7 @@ router.put('/badges', async (req, res) => {
   }
 });
 
-router.delete('/badges/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('badges').doc(req.params.id).delete();
     logger.info(`Badge ${req.params.id} deleted`);

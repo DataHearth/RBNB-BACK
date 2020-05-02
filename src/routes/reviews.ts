@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/reviews', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const reviews = await firestore.collection('reviews').get();
     if (reviews.empty) {
@@ -33,7 +33,7 @@ router.get('/reviews', async (req, res) => {
   }
 });
 
-router.get('/reviews/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const review = await firestore.collection('reviews').doc(req.params.id).get();
     if (!review.exists) {
@@ -50,7 +50,7 @@ router.get('/reviews/:id', async (req, res) => {
   }
 });
 
-router.post('/reviews/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     res.status(400).end();
@@ -67,7 +67,7 @@ router.post('/reviews/:id', async (req, res) => {
   }
 });
 
-router.put('/reviews', async (req, res) => {
+router.put('/', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     res.status(400).end();
@@ -88,7 +88,7 @@ router.put('/reviews', async (req, res) => {
   }
 });
 
-router.delete('/reviews/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('reviews').doc(req.params.id).delete();
     logger.info(`Review ${req.params.id} deleted`);

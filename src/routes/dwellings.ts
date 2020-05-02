@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/dwellings', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const dwellings = await firestore.collection('dwellings').get();
     if (dwellings.empty) {
@@ -33,7 +33,7 @@ router.get('/dwellings', async (req, res) => {
   }
 });
 
-router.get('/dwellings/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const dwelling = await firestore.collection('dwellings').doc(req.params.id).get();
     if (!dwelling.exists) {
@@ -50,7 +50,7 @@ router.get('/dwellings/:id', async (req, res) => {
   }
 });
 
-router.post('/dwellings/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
     res.status(400).end();
@@ -67,7 +67,7 @@ router.post('/dwellings/:id', async (req, res) => {
   }
 });
 
-router.put('/dwellings', async (req, res) => {
+router.put('/', async (req, res) => {
   const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
     res.status(400).end();
@@ -88,7 +88,7 @@ router.put('/dwellings', async (req, res) => {
   }
 });
 
-router.delete('/dwellings/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('dwellings').doc(req.params.id).delete();
     logger.info(`Dwelling ${req.params.id} deleted`);

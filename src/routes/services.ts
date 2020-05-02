@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/services', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const services = await firestore.collection('services').get();
     if (services.empty) {
@@ -33,7 +33,7 @@ router.get('/services', async (req, res) => {
   }
 });
 
-router.get('/services/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const service = await firestore.collection('services').doc(req.params.id).get();
     if (!service.exists) {
@@ -50,7 +50,7 @@ router.get('/services/:id', async (req, res) => {
   }
 });
 
-router.post('/services/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const validatedService = servicesModel.validate(req.body);
   if (validatedService.error) {
     res.status(400).end();
@@ -67,7 +67,7 @@ router.post('/services/:id', async (req, res) => {
   }
 });
 
-router.put('/services', async (req, res) => {
+router.put('/', async (req, res) => {
   const validatedService = servicesModel.validate(req.body);
   if (validatedService.error) {
     res.status(400).end();
@@ -88,7 +88,7 @@ router.put('/services', async (req, res) => {
   }
 });
 
-router.delete('/services/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('services').doc(req.params.id).delete();
     logger.info(`service ${req.params.id} deleted`);
