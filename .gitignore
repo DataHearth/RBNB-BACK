@@ -105,3 +105,6 @@ dist
 
 # Firebase
 serviceAccountKey.json
+
+#Temp folder
+temp

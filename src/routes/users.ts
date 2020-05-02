@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await firestore.collection('users').get();
     if (users.empty) {
@@ -33,7 +33,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
-router.get('/users/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const user = await firestore.collection('users').doc(req.params.id).get();
     if (!user.exists) {
@@ -50,7 +50,7 @@ router.get('/users/:id', async (req, res) => {
   }
 });
 
-router.post('/users/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
@@ -67,7 +67,7 @@ router.post('/users/:id', async (req, res) => {
   }
 });
 
-router.put('/users', async (req, res) => {
+router.put('/', async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     res.status(400).end();
@@ -88,7 +88,7 @@ router.put('/users', async (req, res) => {
   }
 });
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('users').doc(req.params.id).delete();
     logger.info(`User ${req.params.id} deleted`);

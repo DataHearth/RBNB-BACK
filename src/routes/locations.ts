@@ -8,7 +8,7 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/locations', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const locations = await firestore.collection('locations').get();
     if (locations.empty) {
@@ -34,7 +34,7 @@ router.get('/locations', async (req, res) => {
   }
 });
 
-router.get('/locations/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const location = await firestore.collection('locations').doc(req.params.id).get();
     if (!location.exists) {
@@ -51,7 +51,7 @@ router.get('/locations/:id', async (req, res) => {
   }
 });
 
-router.post('/locations/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
   const {city, longitude, latitude} = req.body;
   const geopoints = new firebase.firestore.GeoPoint(latitude, longitude);
 
@@ -71,7 +71,7 @@ router.post('/locations/:id', async (req, res) => {
   }
 });
 
-router.put('/locations', async (req, res) => {
+router.put('/', async (req, res) => {
   const {city, longitude, latitude} = req.body;
   const geopoints = new firebase.firestore.GeoPoint(latitude, longitude);
 
@@ -95,7 +95,7 @@ router.put('/locations', async (req, res) => {
   }
 });
 
-router.delete('/locations/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await firestore.collection('locations').doc(req.params.id).delete();
     logger.info(`location ${req.params.id} deleted`);
