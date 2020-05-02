@@ -1,35 +1,22 @@
 // eslint-disable-next-line no-unused-vars
-import {Request, Response} from 'express';
-import * as Busboy from 'busboy';
-import * as path from 'path';
-import * as fs from 'fs';
+import {Request, Response, NextFunction} from 'express';
 import firebase from './firebase';
 import logger from './logger';
 
 interface Metadata {
   path: string,
-  type: string,
-}
-
-function setupTempFile(filename: string) {
-  const temp = path.join(__dirname, '../..', 'temp');
-  if (!fs.existsSync(temp)) {
-    fs.mkdirSync(temp);
-  }
-
-  return fs.createWriteStream(path.join(temp, filename));
+  contentType: string
 }
 
 async function uploadFile(metadata: Metadata) {
   try {
     const bucket = firebase.storage().bucket('gs://rbnb-30af7.appspot.com');
     const file = await bucket.upload(metadata.path, {
-      metadata: {
-        contentType: metadata.type,
-      },
+      public: true,
+      destination: `originals/${metadata.path.split('/')[1]}`,
+      contentType: metadata.contentType,
+      validation: 'crc32c',
     });
-
-    await file[0].makePublic();
 
     // * Another option with firebase URL
     // * https://stackoverflow.com/questions/42956250/get-download-url-from-file-uploaded-with-cloud-functions-for-firebase/42959262#42959262
@@ -43,30 +30,33 @@ async function uploadFile(metadata: Metadata) {
   }
 }
 
-export default function parseBody(req: Request, res: Response) {
-  const uploadMetadata: Array<Metadata> = [];
-  const urls: Array<string> = [];
+export default async function parseBody(req: Request, res: Response, next: NextFunction) {
+  const files = req.files ? req.files : req.file;
+  const {body} = req;
+  const urls = [];
 
-  const busboy = new Busboy({headers: req.headers});
-
-  busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-    const writeStream = setupTempFile(filename);
-    file.pipe(writeStream);
-    uploadMetadata.push({
-      path: <string>writeStream.path,
-      type: mimetype,
-    });
-  });
-
-  busboy.on('finish', async () => {
-    for (let index = 0; index < uploadMetadata.length; index += 1) {
+  if (Array.isArray(files)) {
+    const filenames = [];
+    for (let index = 0; index < files.length; index += 1) {
       // eslint-disable-next-line no-await-in-loop
-      const url = await uploadFile(uploadMetadata[index]);
-      urls.push(url);
+      urls.push(await uploadFile({
+        contentType: files[index].mimetype,
+        path: files[index].path,
+      }));
+
+      filenames.push(files[index].filename);
     }
 
-    res.json(urls.length > 1 ? urls : urls[0]);
-  });
+    logger.info(`Uploaded ${files.length} file to originals folder`, {filename: filenames});
+    body.pictures = urls;
+  } else {
+    body.picture = await uploadFile({
+      contentType: <string>files.mimetype,
+      path: <string>files.path,
+    });
 
-  req.pipe(busboy);
+    logger.info('Uploaded 1 file to originals folder', {filename: files.filename});
+  }
+
+  next();
 }
