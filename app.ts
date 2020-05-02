@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as multer from 'multer';
+import * as responseTime from 'response-time';
 import logger from './src/lib/logger';
 import locationsRoutes from './src/routes/locations';
 import usersRoutes from './src/routes/users';
@@ -15,6 +16,11 @@ const app = express();
 
 const port = process.env.PORT || 8080;
 
+app.use(responseTime((req: express.Request, res: express.Response, time: any) => {
+  const ms = Math.round(time * 100) / 100;
+  logger.http(`${req.method} ${req.baseUrl} - ${ms} ms`);
+  res.setHeader('X-Reponse-Time', ms);
+}));
 app.listen(port, () => {
   logger.info(`Server listening on port ${port}`);
 });
