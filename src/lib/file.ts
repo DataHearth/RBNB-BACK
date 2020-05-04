@@ -63,15 +63,6 @@ export default async function parseBody(req: Request, res: Response, next: NextF
   for (const [key, value] of Object.entries(body)) {
     try {
       body[key] = JSON.parse(<any>value);
-      if (body[key] !== null && typeof body[key] === 'object') {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const [key2, value2] of body[key]) {
-          try {
-            body[key][key2] = JSON.parse(<any>value2);
-          // eslint-disable-next-line no-empty
-          } catch (error) {}
-        }
-      }
     // eslint-disable-next-line no-empty
     } catch (error) {}
   }
