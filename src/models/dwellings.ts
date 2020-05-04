@@ -5,6 +5,7 @@ export default joi.object().keys({
   description: joi.string().required(),
   location: joi.string().required(), // ? Probably could move the collection in an object here
   pictures: joi.array().items(joi.string().uri()),
+  user: joi.string().required(),
   price: joi.number().required(),
   rentalType: joi.string(), // ! Set valid data
   resident: joi.number().positive().integer().required(),
