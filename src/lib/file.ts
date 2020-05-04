@@ -31,7 +31,8 @@ async function uploadFile(metadata: Metadata) {
 }
 
 export default async function parseBody(req: Request, res: Response, next: NextFunction) {
-  const files = req.files ? req.files : req.file;
+  // eslint-disable-next-line no-nested-ternary
+  const files = req.files ? req.files : req.file ? req.file : null;
   const {body} = req;
   const urls = [];
 
@@ -49,13 +50,21 @@ export default async function parseBody(req: Request, res: Response, next: NextF
 
     logger.info(`Uploaded ${files.length} file to originals folder`, {filename: filenames});
     body.pictures = urls;
-  } else {
+  } else if (files !== null) {
     body.picture = await uploadFile({
       contentType: <string>files.mimetype,
       path: <string>files.path,
     });
 
     logger.info('Uploaded 1 file to originals folder', {filename: files.filename});
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, value] of Object.entries(body)) {
+    try {
+      body[key] = JSON.parse(<any>value);
+    // eslint-disable-next-line no-empty
+    } catch (error) {}
   }
 
   next();
