@@ -9,6 +9,7 @@ import servicesRoutes from './src/routes/services';
 import reviewsRoutes from './src/routes/reviews';
 import dwellingsRoutes from './src/routes/dwellings';
 import badgesRoutes from './src/routes/badges';
+import userDataRoutes from './src/routes/userData';
 
 const upload = multer();
 const app = express();
@@ -31,3 +32,4 @@ app.use('/services', upload.none(), servicesRoutes);
 app.use('/users', usersRoutes);
 app.use('/badges', badgesRoutes);
 app.use('/dwellings', dwellingsRoutes);
+app.use('/user-data', upload.none(), userDataRoutes);
