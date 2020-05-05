@@ -29,7 +29,10 @@
       "quotes": [2, "single"],
       "import/extensions": "off",
       "object-curly-spacing": "off",
-      "linebreak-style": "off"
+      "linebreak-style": "off",
+      "no-nested-ternary": "off",
+      "no-throw-literal": "off",
+      "no-restricted-syntax": "off"
     },
     "settings": {
       "import/resolver": {
