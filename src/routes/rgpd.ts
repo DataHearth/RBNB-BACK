@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import logger from '../lib/logger';
-import recursiveDeletion from '../lib/recursiveDeletion';
+import deletion from '../lib/rgpd/deletion';
 
 const router = Router();
 
 router.delete('/:id', async (req, res) => {
-  const isDeleted = await recursiveDeletion(req.params.id);
+  const isDeleted = await deletion(req.params.id);
   if (!isDeleted) {
     res.status(400).end();
   }

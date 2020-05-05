@@ -1,5 +1,5 @@
-import firebase from './firebase';
-import logger from './logger';
+import firebase from '../firebase';
+import logger from '../logger';
 
 const firestore = firebase.firestore();
 
