@@ -32,7 +32,7 @@ router.get('/', upload.none(), async (req, res) => {
 
     res.json(formattedUsers);
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -49,7 +49,7 @@ router.get('/:id', upload.none(), async (req, res) => {
     logger.info(`retrieved user ${req.params.id}`);
     res.json({id: user.id, ...user.data()});
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -67,7 +67,7 @@ router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => 
 
     res.status(201).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -89,7 +89,7 @@ router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
       ...validatedUser.value,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -101,7 +101,7 @@ router.delete('/:id', upload.none(), async (req, res) => {
 
     res.status(200).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });

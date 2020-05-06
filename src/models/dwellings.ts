@@ -9,7 +9,7 @@ export default joi.object().keys({
   rentalType: joi.string(), // ! Set valid data
   smoking: joi.bool().default(false),
   type: joi.string(),
-  pictures: joi.array().items(joi.string().uri()),
+  pictures: joi.array().items(joi.string().uri()).default(['http://icons.iconarchive.com/icons/icons8/windows-8/512/City-No-Camera-icon.png']),
   rooms: joi.number().positive().integer().required(),
   services: joi.array().items(joi.string()).required(),
   badges: joi.array().items(joi.string()).required(),

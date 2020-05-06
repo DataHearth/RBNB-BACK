@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 
     res.json(formattedReviews);
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -45,12 +45,12 @@ router.get('/:id', async (req, res) => {
     logger.info(`retrieved review ${req.params.id}`);
     res.json({id: review.id, ...review.data()});
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:dwelling/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     logger.warn('Validation error', {error: validatedReview.error});
@@ -59,16 +59,17 @@ router.post('/:id', async (req, res) => {
   }
 
   try {
-    await firestore.collection('reviews').doc(req.params.id).update(validatedReview.value);
+    await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').doc(req.params.id)
+      .update(validatedReview.value);
 
     res.status(201).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     logger.warn('Validation error', {error: validatedReview.error});
@@ -77,7 +78,7 @@ router.put('/', async (req, res) => {
   }
 
   try {
-    const review = await firestore.collection('reviews').add(validatedReview.value);
+    const review = await firestore.collection('dwellings').doc(req.params.id).collection('reviews').add(validatedReview.value);
     logger.info(`Review added with id ${review.id}`, {data: validatedReview.value});
 
     res.json({
@@ -85,7 +86,7 @@ router.put('/', async (req, res) => {
       ...validatedReview.value,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -97,7 +98,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
