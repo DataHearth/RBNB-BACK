@@ -7,35 +7,10 @@ const firestore = admin.firestore();
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/:dwelling/:id', async (req, res) => {
   try {
-    const reviews = await firestore.collection('reviews').get();
-    if (reviews.empty) {
-      logger.warn('No review in collection reviews');
-      res.status(204).end();
-      return;
-    }
-
-    logger.info('retrieved all reviews');
-    const formattedReviews = [];
-
-    reviews.forEach((document) => {
-      formattedReviews.push({
-        id: document.id,
-        ...document.data(),
-      });
-    });
-
-    res.json(formattedReviews);
-  } catch (error) {
-    logger.error('Firestore error', {error});
-    res.status(500).end();
-  }
-});
-
-router.get('/:id', async (req, res) => {
-  try {
-    const review = await firestore.collection('reviews').doc(req.params.id).get();
+    const review = await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').doc(req.params.id)
+      .get();
     if (!review.exists) {
       logger.warn(`${req.params.id} doesn't exists`);
       res.status(204).end();
@@ -91,9 +66,10 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:dwelling/:id', async (req, res) => {
   try {
-    await firestore.collection('reviews').doc(req.params.id).delete();
+    await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').doc(req.params.id)
+      .delete();
     logger.info(`Review ${req.params.id} deleted`);
 
     res.status(200).end();
