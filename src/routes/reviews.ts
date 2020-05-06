@@ -59,7 +59,8 @@ router.post('/:id', async (req, res) => {
   }
 
   try {
-    await firestore.collection('reviews').doc(req.params.id).update(validatedReview.value);
+    await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').doc(req.params.id)
+      .update(validatedReview.value);
 
     res.status(201).end();
   } catch (error) {
@@ -77,7 +78,7 @@ router.put('/', async (req, res) => {
   }
 
   try {
-    const review = await firestore.collection('reviews').add(validatedReview.value);
+    const review = await firestore.collection('dwellings').doc(req.params.id).collection('reviews').add(validatedReview.value);
     logger.info(`Review added with id ${review.id}`, {data: validatedReview.value});
 
     res.json({
