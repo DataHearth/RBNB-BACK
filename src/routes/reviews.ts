@@ -7,6 +7,34 @@ const firestore = admin.firestore();
 
 const router = Router();
 
+router.get('/:dwelling', async (req, res) => {
+  const formattedReviews = [];
+
+  try {
+    const reviews = await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').get();
+
+    if (!reviews.empty) {
+      logger.warn(`${req.params.dwelling} doesn't have any reviews`);
+      res.status(204).end();
+      return;
+    }
+
+    logger.info(`retrieved all reviews for dwelling ${req.params.dwelling}`);
+
+    reviews.forEach((document) => {
+      formattedReviews.push({
+        id: document.id,
+        ...document.data(),
+      });
+    });
+
+    res.json(formattedReviews);
+  } catch (error) {
+    logger.error('Firestore error', {error});
+    res.status(500).end();
+  }
+});
+
 router.get('/:dwelling/:id', async (req, res) => {
   try {
     const review = await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').doc(req.params.id)
