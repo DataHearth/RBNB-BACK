@@ -57,6 +57,7 @@ router.get('/:id', upload.none(), async (req, res) => {
 router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
+    logger.warn('Validation error', {error: validatedUser.error});
     res.status(400).end();
     return;
   }
@@ -74,6 +75,7 @@ router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => 
 router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
+    logger.warn('Validation error', {error: validatedUser.error});
     res.status(400).end();
     return;
   }

@@ -53,6 +53,7 @@ router.get('/:id', async (req, res) => {
 router.post('/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
+    logger.warn('Validation error', {error: validatedReview.error});
     res.status(400).end();
     return;
   }
@@ -70,6 +71,7 @@ router.post('/:id', async (req, res) => {
 router.put('/', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
+    logger.warn('Validation error', {error: validatedReview.error});
     res.status(400).end();
     return;
   }

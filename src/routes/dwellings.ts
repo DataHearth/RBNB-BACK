@@ -57,6 +57,7 @@ router.get('/:id', upload.none(), async (req, res) => {
 router.post('/:id', upload.array('pictures', 3), fileHandling, async (req, res) => {
   const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
+    logger.warn('Validation error', {error: validatedDwelling.error});
     res.status(400).end();
     return;
   }
@@ -74,6 +75,7 @@ router.post('/:id', upload.array('pictures', 3), fileHandling, async (req, res) 
 router.put('/', upload.array('pictures', 3), fileHandling, async (req, res) => {
   const validatedDwelling = dwellingsDwelling.validate(req.body);
   if (validatedDwelling.error) {
+    logger.warn('Validation error', {error: validatedDwelling.error});
     res.status(400).end();
     return;
   }

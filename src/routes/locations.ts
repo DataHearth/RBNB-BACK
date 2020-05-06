@@ -57,6 +57,7 @@ router.post('/:id', async (req, res) => {
 
   const validatedLocation = locationsModel.validate({city, coordinates: geopoints});
   if (validatedLocation.error) {
+    logger.warn('Validation error', {error: validatedLocation.error});
     res.status(400).end();
     return;
   }
@@ -77,6 +78,7 @@ router.put('/', async (req, res) => {
 
   const validatedLocation = locationsModel.validate({city, coordinates: geopoints});
   if (validatedLocation.error) {
+    logger.warn('Validation error', {error: validatedLocation.error});
     res.status(400).end();
     return;
   }
