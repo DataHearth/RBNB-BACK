@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 
     res.json(formattedReviews);
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -45,12 +45,12 @@ router.get('/:id', async (req, res) => {
     logger.info(`retrieved review ${req.params.id}`);
     res.json({id: review.id, ...review.data()});
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:dwelling/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     logger.warn('Validation error', {error: validatedReview.error});
@@ -64,12 +64,12 @@ router.post('/:id', async (req, res) => {
 
     res.status(201).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const validatedReview = reviewsModel.validate(req.body);
   if (validatedReview.error) {
     logger.warn('Validation error', {error: validatedReview.error});
@@ -86,7 +86,7 @@ router.put('/', async (req, res) => {
       ...validatedReview.value,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -98,7 +98,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });

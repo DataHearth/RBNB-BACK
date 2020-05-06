@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 
     res.json(formattedLocations);
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -46,7 +46,7 @@ router.get('/:id', async (req, res) => {
     logger.info(`retrieved location ${req.params.id}`);
     res.json({id: location.id, ...location.data()});
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -67,7 +67,7 @@ router.post('/:id', async (req, res) => {
 
     res.status(201).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -92,7 +92,7 @@ router.put('/', async (req, res) => {
       ...validatedLocation.value,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
@@ -104,7 +104,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).end();
   } catch (error) {
-    logger.error(error);
+    logger.error('Firestore error', {error});
     res.status(500).end();
   }
 });
