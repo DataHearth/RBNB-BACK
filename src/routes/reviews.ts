@@ -13,7 +13,7 @@ router.get('/:dwelling', async (req, res) => {
   try {
     const reviews = await firestore.collection('dwellings').doc(req.params.dwelling).collection('reviews').get();
 
-    if (!reviews.empty) {
+    if (reviews.empty) {
       logger.warn(`${req.params.dwelling} doesn't have any reviews`);
       res.status(204).end();
       return;
