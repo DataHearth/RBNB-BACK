@@ -1,7 +1,6 @@
 import * as joi from '@hapi/joi';
 import firebase from '../lib/firebase';
 
-
 export default joi.object().keys({
   date: joi.date().timestamp().default(firebase.firestore.Timestamp.now()),
   description: joi.string().required(),
