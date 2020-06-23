@@ -73,6 +73,12 @@ router.post('/:id', upload.single('picture'), fileHandling, async (req, res) => 
 });
 
 router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
+  if (!req.body.uid) {
+    logger.warn('UID undefined');
+    res.status(400).end();
+    return;
+  }
+
   const validatedUser = usersModel.validate(req.body);
   if (validatedUser.error) {
     logger.warn('Validation error', {error: validatedUser.error});
@@ -81,11 +87,11 @@ router.put('/', upload.single('picture'), fileHandling, async (req, res) => {
   }
 
   try {
-    const user = await firestore.collection('users').add(validatedUser.value);
-    logger.info(`User added with id ${user.id}`, {data: validatedUser.value});
+    await firestore.collection('users').doc(validatedUser.value.uid).set(validatedUser.value);
+    logger.info(`User added with id ${validatedUser.value.uid}`, {data: validatedUser.value});
 
     res.json({
-      id: user.id,
+      id: validatedUser.value.uid,
       ...validatedUser.value,
     });
   } catch (error) {
