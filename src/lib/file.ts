@@ -27,6 +27,9 @@ export default async function parseBody(req: Request, res: Response, next: NextF
       body.picture = await uploadFile(file.path, file.mimetype);
 
       logger.info('File uploaded', {filename: file.filename});
+    } else {
+      next();
+      return;
     }
   } catch (error) {
     logger.debug('Deleting uploaded files...');
