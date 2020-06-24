@@ -10,4 +10,5 @@ export default joi.object().keys({
   picture: joi.string().uri(),
   address: joi.string(),
   phone: joi.string(),
+  actype: joi.string().valid('student', 'host'),
 });
