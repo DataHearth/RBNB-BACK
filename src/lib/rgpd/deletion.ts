@@ -24,7 +24,7 @@ async function deleteDwellings(objectID: string) {
 
   if (userDwellings.empty) {
     logger.error(errorMessage.noDwellingsFound);
-    throw errorMessage.noDwellingsFound;
+    return;
   }
 
   for (let index = 0; index < userDwellings.docs.length; index += 1) {
@@ -35,6 +35,7 @@ async function deleteDwellings(objectID: string) {
     dwellingsPromises.push(firestore.collection('dwellings').doc(usersDocs[index]).delete());
   }
 
+  // eslint-disable-next-line consistent-return
   return dwellingsPromises;
 }
 
@@ -52,7 +53,7 @@ async function deleteReviews(objectID: string) {
 
   if (userDwellings.empty) {
     logger.error(errorMessage.noReviewsFound);
-    throw errorMessage.noReviewsFound;
+    return;
   }
 
   for (let index = 0; index < userDwellings.docs.length; index += 1) {
@@ -63,6 +64,7 @@ async function deleteReviews(objectID: string) {
     reviewsPromises.push(firestore.collection('reviews').doc(usersDocs[index]).delete());
   }
 
+  // eslint-disable-next-line consistent-return
   return reviewsPromises;
 }
 
@@ -77,10 +79,10 @@ async function deleteUsers(objectID: string) {
 
   if (!user.exists) {
     logger.error(errorMessage.noUsersFound);
-    throw errorMessage.noUsersFound;
+    return;
   }
 
-  return firestore.collection('users').doc(objectID).delete();
+  await firestore.collection('users').doc(objectID).delete();
 }
 
 export default async function deleteRecursivly(user: string) {
